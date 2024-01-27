@@ -12,11 +12,13 @@ public class ChatListener implements Listener {
 
     // Using MONITOR eventpriority?!??!?!?!
     // If the translator is enabled, we *need* first call on the chatmessage to translate it
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onAsyncChat(AsyncPlayerChatEvent e) {
         if (ChatTranslatorProcessor.getInstance().enabledTranslations()) {
             e.setCancelled(true);
             ChatTranslatorProcessor.getInstance().handleTranslation(e.getPlayer(), e.getMessage());
+        } else if (ChatChannelProcessor.getInstance().usesSeperateChats()) {
+            if (ChatChannelProcessor.getInstance().handle(e.getPlayer(), e.getMessage())) e.setCancelled(true);
         }
     }
 
