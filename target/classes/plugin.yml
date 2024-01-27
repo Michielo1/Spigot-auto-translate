@@ -1,0 +1,9 @@
+main: com.michielo.Main
+name: MultiChat
+version: '1.0'
+author: Michielo
+website: michielo.com
+
+commands:
+  language:
+

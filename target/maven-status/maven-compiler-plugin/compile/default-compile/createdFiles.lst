@@ -1,0 +1,11 @@
+com\michielo\processors\ChatChannelProcessor$1.class
+com\michielo\files\DataManager.class
+com\michielo\processors\ChatTranslatorProcessor.class
+com\michielo\player\PlayerDataManager.class
+com\michielo\bukkit\command\LanguageCommand.class
+com\michielo\Main.class
+com\michielo\processors\ChatChannelProcessor.class
+com\michielo\bukkit\listener\JoinListener.class
+com\michielo\player\PlayerData.class
+com\michielo\bukkit\listener\ChatListener.class
+com\michielo\bukkit\listener\QuitListener.class

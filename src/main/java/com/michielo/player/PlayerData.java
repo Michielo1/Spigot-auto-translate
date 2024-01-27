@@ -1,0 +1,56 @@
+package com.michielo.player;
+
+import com.michielo.Main;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
+public class PlayerData {
+
+    /*
+        Variables
+     */
+
+    private Player player;
+    private boolean hasChosenLanguage;
+    private String language;
+
+    /*
+        Handlers
+     */
+
+    public void setLanguage(String language) {
+        this.language = language;
+        this.hasChosenLanguage = true;
+        Main.getInstance().getData().getConfig().set(getPlayer().getUniqueId().toString(), language);
+        Main.getInstance().getData().saveConfig();
+    }
+
+    /*
+        Getters
+     */
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public boolean hasChosenLanguage() {
+        return this.hasChosenLanguage;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public PlayerData(Player player) {
+        this.player = player;
+
+        FileConfiguration file = Main.getInstance().getData().getConfig();
+        if (file.getString(player.getUniqueId().toString()) != null) {
+            this.hasChosenLanguage = true;
+            this.language = file.getString(player.getUniqueId().toString());
+        } else {
+            this.hasChosenLanguage = false;
+        }
+    }
+
+}

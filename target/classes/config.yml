@@ -1,0 +1,19 @@
+#############
+# MultiChat #
+#############
+
+# For a startup guide please see [SOON]
+
+# Settings for changing the chat up into a global and local channel
+LocalAndGlobalChat: true
+GlobalChatPrefix: '%'
+LocalRadius: 50
+Local_Prefix: "&7[Local] &f%player% >> %message%"
+Global_Prefix: "&7[Global] &f%player% >> %message%"
+
+# Translator settings
+EnableTranslations: True
+AllowFreeLanguageChoice: True
+ForceLanguage: False
+ForcedLanguage: 'ENG'
+DefaultLanguage: 'ENG'
