@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,13 +77,21 @@ public class ChatTranslatorProcessor {
 
         sender.sendMessage(getFullMessage(sender.getDisplayName(), original));
 
+        List<PlayerData> playersToRemove = new ArrayList<>();
+
         // send to all players in same language group without delay
         for (PlayerData player : players) {
             if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
                 player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
-                players.remove(player);
+                playersToRemove.add(player);
             }
         }
+
+        for (PlayerData player : playersToRemove) {
+            players.remove(player);
+        }
+
+        if (players.isEmpty()) return;
 
         // Group players by language using Java Streams
         Map<String, List<PlayerData>> playersByLanguage = players.stream()
