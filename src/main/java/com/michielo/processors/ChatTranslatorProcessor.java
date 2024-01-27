@@ -67,18 +67,19 @@ public class ChatTranslatorProcessor {
 
     public void handleTranslation(Player sender, String original) {
         List<PlayerData> players = PlayerDataManager.getInstance().getAllPlayerData();
-        players.remove(PlayerDataManager.getInstance().getPlayerData(sender));
-
-        sender.sendMessage(sender.getDisplayName() + " >> " + original);
 
         for (PlayerData player : players) {
             if (!player.hasChosenLanguage() && player.getLanguage() == null) player.setLanguage("eng");
         }
 
+        players.remove(PlayerDataManager.getInstance().getPlayerData(sender));
+
+        sender.sendMessage(getFullMessage(sender.getDisplayName(), original));
+
         // send to all players in same language group without delay
         for (PlayerData player : players) {
             if (player.getLanguage().equals(original)) {
-                player.getPlayer().sendMessage(sender.getDisplayName() + " >> " + original);
+                player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
                 players.remove(player);
             }
         }
@@ -93,9 +94,20 @@ public class ChatTranslatorProcessor {
             String translation = this.translator.getTranslation(original,
                     PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
             for (PlayerData player : playersForLanguage) {
-                player.getPlayer().sendMessage(sender.getDisplayName() + " >> " + this.translator.extractTranslation(translation));
+                player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), this.translator.extractTranslation(translation)));
             }
         }
+    }
+
+    /*
+        Util class
+     */
+
+    private String getFullMessage(String sender, String message) {
+        String template = Main.getInstance().getConfig().getString("Translator_Prefix");
+        template = template.replace("%player%", sender);
+        template = template.replace("%message%", message);
+        return template;
     }
 
 }
