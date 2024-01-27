@@ -38,6 +38,7 @@ public class PlayerData {
     }
 
     public String getLanguage() {
+        if (this.language == null) return null;
         return this.language.toUpperCase();
     }
 

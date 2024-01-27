@@ -14,6 +14,8 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class ChatChannelProcessor {
 
@@ -84,7 +86,7 @@ public class ChatChannelProcessor {
         return true;
     }
 
-    public List<Object> handleInternal(String message, Player sender) {
+    public List<Object> handleInternal(String message, Player sender) throws ExecutionException, InterruptedException {
         // this method returns [0] the list of players to send the message to
         // and [1] the adjusted method
 
@@ -98,10 +100,11 @@ public class ChatChannelProcessor {
             returnList.add(correctedMessage);
             return returnList;
         } else {
-            List<PlayerData> playerDataList = new ArrayList<>();
+            CompletableFuture<List<Object>> future = new CompletableFuture<>();
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    List<PlayerData> playerDataList = new ArrayList<>();
                     Collection<Entity> entityCollection = sender.getWorld().getNearbyEntities(sender.getLocation(),
                             localRadius, localRadius, localRadius);
 
@@ -110,13 +113,17 @@ public class ChatChannelProcessor {
                             playerDataList.add(PlayerDataManager.getInstance().getPlayerData(p));
                         }
                     }
+
+                    String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, localPrefix);
+                    List<Object> returnList = new ArrayList<>();
+                    returnList.add(playerDataList);
+                    returnList.add(correctedMessage);
+
+                    // Complete the CompletableFuture with the result
+                    future.complete(returnList);
                 }
             }.runTask(Main.getInstance());
-            String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, this.localPrefix);
-            List<Object> returnList = new ArrayList<>();
-            returnList.add(playerDataList);
-            returnList.add(correctedMessage);
-            return returnList;
+            return future.get();
         }
     }
 

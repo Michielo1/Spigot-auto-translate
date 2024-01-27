@@ -8,14 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 
@@ -68,47 +64,49 @@ public class ChatTranslatorProcessor {
 
     public void handleTranslation(Player sender, String original) {
         if (ChatChannelProcessor.getInstance().usesSeperateChats()) {
-            List<Object> returnList = ChatChannelProcessor.getInstance().handleInternal(original, sender);
-            List<PlayerData> playerDataInRange = (List<PlayerData>) returnList.get(0);
-            String message = (String) returnList.get(1);
+            try {
+                List<Object> returnList = ChatChannelProcessor.getInstance().handleInternal(original, sender);
+                List<PlayerData> playerDataInRange = (List<PlayerData>) returnList.get(0);
+                String message = (String) returnList.get(1);
 
-            for (PlayerData player : playerDataInRange) {
-                if (!player.hasChosenLanguage() && player.getLanguage() == null) player.setLanguage("eng");
-            }
-
-            playerDataInRange.remove(PlayerDataManager.getInstance().getPlayerData(sender));
-
-            sender.sendMessage(message);
-
-            List<PlayerData> playersToRemove = new ArrayList<>();
-
-            // send to all players in same language group without delay
-            for (PlayerData player : playerDataInRange) {
-                if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
-                    player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
-                    playersToRemove.add(player);
+                for (PlayerData player : playerDataInRange) {
+                    if (!player.hasChosenLanguage() && player.getLanguage() == null) player.setLanguage("eng");
                 }
-            }
 
-            for (PlayerData player : playersToRemove) {
-                playerDataInRange.remove(player);
-            }
+                playerDataInRange.remove(PlayerDataManager.getInstance().getPlayerData(sender));
 
-            if (playerDataInRange.isEmpty()) return;
+                sender.sendMessage(message);
 
-            // Group players by language using Java Streams
-            Map<String, List<PlayerData>> playersByLanguage = playerDataInRange.stream()
-                    .collect(Collectors.groupingBy(PlayerData::getLanguage));
+                List<PlayerData> playersToRemove = new ArrayList<>();
 
-            // Loop through each language and perform some operation
-            for (String language : playersByLanguage.keySet()) {
-                List<PlayerData> playersForLanguage = playersByLanguage.get(language);
-                String translation = this.translator.getTranslation(original,
-                        PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
-                for (PlayerData player : playersForLanguage) {
-                    player.getPlayer().sendMessage(message.replace(original, translation));
+                // send to all players in same language group without delay
+                for (PlayerData player : playerDataInRange) {
+                    if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
+                        player.getPlayer().sendMessage(message);
+                        playersToRemove.add(player);
+                    }
                 }
-            }
+
+                for (PlayerData player : playersToRemove) {
+                    playerDataInRange.remove(player);
+                }
+
+                if (playerDataInRange.isEmpty()) return;
+
+                // Group players by language using Java Streams
+                Map<String, List<PlayerData>> playersByLanguage = playerDataInRange.stream()
+                        .collect(Collectors.groupingBy(PlayerData::getLanguage));
+
+                // Loop through each language and perform some operation
+                for (String language : playersByLanguage.keySet()) {
+                    List<PlayerData> playersForLanguage = playersByLanguage.get(language);
+                    String translation = this.translator.getTranslation(original,
+                            PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
+                    for (PlayerData player : playersForLanguage) {
+                        player.getPlayer().sendMessage(message.replace(original, translation));
+                    }
+                }
+            } catch (ExecutionException | InterruptedException ignored) {}
             return;
         }
 
