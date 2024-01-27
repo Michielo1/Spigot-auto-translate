@@ -1,14 +1,19 @@
 package com.michielo.processors;
 
 import com.michielo.Main;
+import com.michielo.player.PlayerData;
+import com.michielo.player.PlayerDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ChatChannelProcessor {
 
@@ -77,6 +82,42 @@ public class ChatChannelProcessor {
             }.runTask(Main.getInstance());
         }
         return true;
+    }
+
+    public List<Object> handleInternal(String message, Player sender) {
+        // this method returns [0] the list of players to send the message to
+        // and [1] the adjusted method
+
+        // should be redundant but I tend to be stupid so just checking
+        if (!this.localAndGlobalChat) return null;
+
+        if (message.startsWith(this.GlobalChatPrefix)) {
+            String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, this.globalPrefix);
+            List<Object> returnList = new ArrayList<>();
+            returnList.add(PlayerDataManager.getInstance().getAllPlayerData());
+            returnList.add(correctedMessage);
+            return returnList;
+        } else {
+            List<PlayerData> playerDataList = new ArrayList<>();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Collection<Entity> entityCollection = sender.getWorld().getNearbyEntities(sender.getLocation(),
+                            localRadius, localRadius, localRadius);
+
+                    for (Entity e : entityCollection) {
+                        if (e instanceof Player p) {
+                            playerDataList.add(PlayerDataManager.getInstance().getPlayerData(p));
+                        }
+                    }
+                }
+            }.runTask(Main.getInstance());
+            String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, this.localPrefix);
+            List<Object> returnList = new ArrayList<>();
+            returnList.add(playerDataList);
+            returnList.add(correctedMessage);
+            return returnList;
+        }
     }
 
     /*
