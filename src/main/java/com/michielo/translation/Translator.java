@@ -20,6 +20,38 @@ public class Translator {
             return null;
         }
 
+        if (!src.equals("ENG") && !target.equals("ENG")) {
+            // we have to translate indirectly
+            return getTranslation(getTranslation(text, src, "ENG"), "ENG", target);
+        }
+
+        return getTranslationAPI(text, src, target);
+    }
+
+    public static String extractTranslation(String jsonString) {
+        // Find the index of the "translation" key
+        int startIndex = jsonString.indexOf("\"translation\":");
+        if (startIndex == -1) {
+            // "translation" key not found, return original string
+            return jsonString;
+        }
+
+        // Find the start of the value associated with the "translation" key
+        startIndex = jsonString.indexOf("\"", startIndex + 13) + 1;
+
+        // Find the end of the value associated with the "translation" key
+        int endIndex = jsonString.indexOf("\"", startIndex);
+
+        if (startIndex == -1 || endIndex == -1) {
+            // Issue with JSON structure, return original string
+            return jsonString;
+        }
+
+        // Extract the value associated with the "translation" key
+        return jsonString.substring(startIndex, endIndex);
+    }
+
+    private static String getTranslationAPI(String text, String src, String target) {
         try {
             String apiUrl = "http://159.69.60.114:8000/translate";
 
@@ -68,29 +100,6 @@ public class Translator {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static String extractTranslation(String jsonString) {
-        // Find the index of the "translation" key
-        int startIndex = jsonString.indexOf("\"translation\":");
-        if (startIndex == -1) {
-            // "translation" key not found, return original string
-            return jsonString;
-        }
-
-        // Find the start of the value associated with the "translation" key
-        startIndex = jsonString.indexOf("\"", startIndex + 13) + 1;
-
-        // Find the end of the value associated with the "translation" key
-        int endIndex = jsonString.indexOf("\"", startIndex);
-
-        if (startIndex == -1 || endIndex == -1) {
-            // Issue with JSON structure, return original string
-            return jsonString;
-        }
-
-        // Extract the value associated with the "translation" key
-        return jsonString.substring(startIndex, endIndex);
     }
 
 }
