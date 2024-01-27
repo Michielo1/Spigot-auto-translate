@@ -67,6 +67,51 @@ public class ChatTranslatorProcessor {
     }
 
     public void handleTranslation(Player sender, String original) {
+        if (ChatChannelProcessor.getInstance().usesSeperateChats()) {
+            List<Object> returnList = ChatChannelProcessor.getInstance().handleInternal(original, sender);
+            List<PlayerData> playerDataInRange = (List<PlayerData>) returnList.get(0);
+            String message = (String) returnList.get(1);
+
+            for (PlayerData player : playerDataInRange) {
+                if (!player.hasChosenLanguage() && player.getLanguage() == null) player.setLanguage("eng");
+            }
+
+            playerDataInRange.remove(PlayerDataManager.getInstance().getPlayerData(sender));
+
+            sender.sendMessage(message);
+
+            List<PlayerData> playersToRemove = new ArrayList<>();
+
+            // send to all players in same language group without delay
+            for (PlayerData player : playerDataInRange) {
+                if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
+                    player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
+                    playersToRemove.add(player);
+                }
+            }
+
+            for (PlayerData player : playersToRemove) {
+                playerDataInRange.remove(player);
+            }
+
+            if (playerDataInRange.isEmpty()) return;
+
+            // Group players by language using Java Streams
+            Map<String, List<PlayerData>> playersByLanguage = playerDataInRange.stream()
+                    .collect(Collectors.groupingBy(PlayerData::getLanguage));
+
+            // Loop through each language and perform some operation
+            for (String language : playersByLanguage.keySet()) {
+                List<PlayerData> playersForLanguage = playersByLanguage.get(language);
+                String translation = this.translator.getTranslation(original,
+                        PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
+                for (PlayerData player : playersForLanguage) {
+                    player.getPlayer().sendMessage(message.replace(original, translation));
+                }
+            }
+            return;
+        }
+
         List<PlayerData> players = PlayerDataManager.getInstance().getAllPlayerData();
 
         for (PlayerData player : players) {
