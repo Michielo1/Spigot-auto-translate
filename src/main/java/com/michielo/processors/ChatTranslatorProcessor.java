@@ -102,6 +102,7 @@ public class ChatTranslatorProcessor {
                     List<PlayerData> playersForLanguage = playersByLanguage.get(language);
                     String translation = this.translator.getTranslation(original,
                             PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
+                    translation = this.translator.extractTranslation(translation);
                     for (PlayerData player : playersForLanguage) {
                         player.getPlayer().sendMessage(message.replace(original, translation));
                     }
