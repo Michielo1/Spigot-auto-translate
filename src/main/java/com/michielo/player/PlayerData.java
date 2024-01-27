@@ -38,7 +38,7 @@ public class PlayerData {
     }
 
     public String getLanguage() {
-        return this.language;
+        return this.language.toUpperCase();
     }
 
     public PlayerData(Player player) {
