@@ -78,7 +78,7 @@ public class ChatTranslatorProcessor {
 
         // send to all players in same language group without delay
         for (PlayerData player : players) {
-            if (player.getLanguage().equals(original)) {
+            if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
                 player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
                 players.remove(player);
             }
