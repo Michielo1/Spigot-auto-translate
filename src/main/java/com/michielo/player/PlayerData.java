@@ -1,6 +1,7 @@
 package com.michielo.player;
 
 import com.michielo.Main;
+import com.michielo.translation.Language;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -39,7 +40,7 @@ public class PlayerData {
 
     public String getLanguage() {
         if (this.language == null) return null;
-        return this.language.toUpperCase();
+        return Language.getAbbreviation(this.language.toUpperCase());
     }
 
     public PlayerData(Player player) {

@@ -26,4 +26,19 @@ public enum Language {
         }
         return null; // Handle invalid input
     }
+
+    public static String getAllAbbreviationsFormatted() {
+        StringBuilder result = new StringBuilder();
+
+        for (Language language : Language.values()) {
+            result.append(language.name()).append(", ");
+        }
+
+        // Remove the trailing ", " if there are elements in the list
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2);
+        }
+
+        return result.toString();
+    }
 }

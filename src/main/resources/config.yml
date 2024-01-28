@@ -17,10 +17,10 @@ Global_Prefix: "&7[Global] %prefix% &f%player% >> %message%"
 
 # Translator settings
 EnableTranslations: true
-AllowFreeLanguageChoice: true
-ForceLanguage: false
-ForcedLanguage: 'ENG'
-DefaultLanguage: 'ENG'
+#AllowFreeLanguageChoice: true
+#ForceLanguage: false
+#ForcedLanguage: 'ENG'
+#DefaultLanguage: 'ENG'
 # This prefix is only relevant if LocalAndGlobalChat is False
 # You can use the placeholders:
 #  %player% : playername
