@@ -3,13 +3,13 @@ package com.michielo.processors;
 import com.michielo.Main;
 import com.michielo.player.PlayerData;
 import com.michielo.player.PlayerDataManager;
+import com.michielo.util.PrefixUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,14 +64,14 @@ public class ChatChannelProcessor {
 
         if (message.startsWith(this.GlobalChatPrefix)) {
             // global chat
-            String correctedMessage = replacePlaceholders(player.getDisplayName(), message, this.globalPrefix);
+            String correctedMessage = replacePlaceholders(player, message, this.globalPrefix);
             Bukkit.broadcastMessage(correctedMessage);
         } else {
             // local chat (on main thread for the getNearbyEntities
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    String correctedMessage = replacePlaceholders(player.getDisplayName(), message, localPrefix);
+                    String correctedMessage = replacePlaceholders(player, message, localPrefix);
                     Collection<Entity> entityCollection = player.getWorld().getNearbyEntities(player.getLocation(),
                             localRadius, localRadius, localRadius);
 
@@ -94,7 +94,7 @@ public class ChatChannelProcessor {
         if (!this.localAndGlobalChat) return null;
 
         if (message.startsWith(this.GlobalChatPrefix)) {
-            String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, this.globalPrefix);
+            String correctedMessage = replacePlaceholders(sender, message, this.globalPrefix);
             List<Object> returnList = new ArrayList<>();
             returnList.add(PlayerDataManager.getInstance().getAllPlayerData());
             returnList.add(correctedMessage);
@@ -114,7 +114,7 @@ public class ChatChannelProcessor {
                         }
                     }
 
-                    String correctedMessage = replacePlaceholders(sender.getDisplayName(), message, localPrefix);
+                    String correctedMessage = replacePlaceholders(sender, message, localPrefix);
                     List<Object> returnList = new ArrayList<>();
                     returnList.add(playerDataList);
                     returnList.add(correctedMessage);
@@ -131,9 +131,14 @@ public class ChatChannelProcessor {
         Util
      */
 
-    private String replacePlaceholders(String playerName, String message, String original) {
-        original = original.replace("%player%", playerName);
+    private String replacePlaceholders(Player player, String message, String original) {
+        original = original.replace("%player%", player.getDisplayName());
         original = original.replace("%message%", message);
+        if (PrefixUtil.getInstance().getPlayerPrefix(player) != null) {
+            original = original.replace("%prefix%", PrefixUtil.getInstance().getPlayerPrefix(player));
+        } else {
+            original = original.replace("%prefix%", "");
+        }
         return ChatColor.translateAlternateColorCodes('&', original);
     }
 

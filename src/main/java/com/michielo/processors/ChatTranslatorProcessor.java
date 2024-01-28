@@ -4,6 +4,7 @@ import com.michielo.Main;
 import com.michielo.player.PlayerData;
 import com.michielo.player.PlayerDataManager;
 import com.michielo.translation.Translator;
+import com.michielo.util.PrefixUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -119,14 +120,14 @@ public class ChatTranslatorProcessor {
 
         players.remove(PlayerDataManager.getInstance().getPlayerData(sender));
 
-        sender.sendMessage(getFullMessage(sender.getDisplayName(), original));
+        sender.sendMessage(getFullMessage(sender, original));
 
         List<PlayerData> playersToRemove = new ArrayList<>();
 
         // send to all players in same language group without delay
         for (PlayerData player : players) {
             if (player.getLanguage().equals(PlayerDataManager.getInstance().getPlayerData(sender).getLanguage())) {
-                player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), original));
+                player.getPlayer().sendMessage(getFullMessage(sender, original));
                 playersToRemove.add(player);
             }
         }
@@ -147,7 +148,7 @@ public class ChatTranslatorProcessor {
             String translation = this.translator.getTranslation(original,
                     PlayerDataManager.getInstance().getPlayerData(sender).getLanguage(), language);
             for (PlayerData player : playersForLanguage) {
-                player.getPlayer().sendMessage(getFullMessage(sender.getDisplayName(), this.translator.extractTranslation(translation)));
+                player.getPlayer().sendMessage(getFullMessage(sender, this.translator.extractTranslation(translation)));
             }
         }
     }
@@ -156,10 +157,15 @@ public class ChatTranslatorProcessor {
         Util class
      */
 
-    private String getFullMessage(String sender, String message) {
+    private String getFullMessage(Player sender, String message) {
         String template = Main.getInstance().getConfig().getString("Translator_Prefix");
-        template = template.replace("%player%", sender);
+        template = template.replace("%player%", sender.getDisplayName());
         template = template.replace("%message%", message);
+        if (PrefixUtil.getInstance().getPlayerPrefix(sender) != null) {
+            template = template.replace("%prefix%", PrefixUtil.getInstance().getPlayerPrefix(sender));
+        } else {
+            template = template.replace("%prefix%", "");
+        }
         return template;
     }
 

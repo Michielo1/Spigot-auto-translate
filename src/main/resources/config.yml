@@ -11,17 +11,19 @@ LocalRadius: 50
 # For these prefixes you can use the placeholders:
 #  %player% : playername
 #  %message% : message
-Local_Prefix: "&7[Local] &f%player% >> %message%"
-Global_Prefix: "&7[Global] &f%player% >> %message%"
+#  %prefix% : Luckperms prefix
+Local_Prefix: "&7[Local] %prefix% &f%player% >> %message%"
+Global_Prefix: "&7[Global] %prefix% &f%player% >> %message%"
 
 # Translator settings
-EnableTranslations: True
-AllowFreeLanguageChoice: True
-ForceLanguage: False
+EnableTranslations: true
+AllowFreeLanguageChoice: true
+ForceLanguage: false
 ForcedLanguage: 'ENG'
 DefaultLanguage: 'ENG'
 # This prefix is only relevant if LocalAndGlobalChat is False
 # You can use the placeholders:
 #  %player% : playername
 #  %message% : message
-Translator_Prefix: "%player% >> %message%"
+#  %prefix% : Luckperms prefix
+Translator_Prefix: "%prefix% %player% >> %message%"
