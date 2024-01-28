@@ -24,7 +24,6 @@ public class Translator {
             // we have to translate indirectly
             return getTranslation(getTranslation(text, src, "ENG"), "ENG", target);
         }
-
         return getTranslationAPI(text, src, target);
     }
 
