@@ -109,6 +109,8 @@ public class ChatChannelProcessor {
                             localRadius, localRadius, localRadius);
 
                     for (Entity e : entityCollection) {
+                        boolean isCitizensNPC = e.hasMetadata("NPC");
+                        if (isCitizensNPC) continue;
                         if (e instanceof Player p) {
                             playerDataList.add(PlayerDataManager.getInstance().getPlayerData(p));
                         }
