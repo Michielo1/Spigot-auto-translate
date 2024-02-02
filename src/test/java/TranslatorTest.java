@@ -68,9 +68,9 @@ public class TranslatorTest {
 
     private static Stream<Object[]> translationTestData() {
         return Stream.of(
-                new Object[]{"Hoe gaat het vandaag?", "NLD", "ENG", "{\"translation\":\"How's it going today?\"}"},
+                new Object[]{"Hoe gaat het vandaag?", "NLD", "ENG", "{\"translation\":\"How are you today?\"}"},
                 new Object[]{"Cómo te va", "SPA", "ENG", "{\"translation\":\"How's it going?\"}"},
-                new Object[]{"Hello", "ENG", "NLD", "{\"translation\":\"Hallo\"}"}
+                new Object[]{"Hello", "ENG", "NLD", "{\"translation\":\"Hallo.\"}"}
         );
     }
 

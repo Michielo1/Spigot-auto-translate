@@ -49,7 +49,6 @@ public class Main extends JavaPlugin {
         // load commands
         getCommand("language").setExecutor(new LanguageCommand());
 
-
         Bukkit.getLogger().info("Started");
     }
 
