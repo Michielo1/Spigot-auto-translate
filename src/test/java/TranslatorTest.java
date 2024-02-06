@@ -17,7 +17,7 @@ public class TranslatorTest {
     @MethodSource("translationTestData")
     public void testTranslationApi(String text, String sourceLang, String targetLang, String expectedTranslation) {
         try {
-            String apiUrl = "http://159.69.60.114:8000/translate";
+            String apiUrl = "http://translationapi.assistantslab.com/translate";
 
             // Create a URL object with the API endpoint
             URL url = new URL(apiUrl);
@@ -70,7 +70,7 @@ public class TranslatorTest {
         return Stream.of(
                 new Object[]{"Hoe gaat het vandaag?", "NLD", "ENG", "{\"translation\":\"How are you today?\"}"},
                 new Object[]{"Cómo te va", "SPA", "ENG", "{\"translation\":\"How's it going?\"}"},
-                new Object[]{"Hello", "ENG", "NLD", "{\"translation\":\"Hallo.\"}"}
+                new Object[]{"Hello", "ENG", "NLD", "{\"translation\":\"Hallo!\"}"}
         );
     }
 

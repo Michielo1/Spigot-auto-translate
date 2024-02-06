@@ -52,7 +52,7 @@ public class Translator {
 
     private static String getTranslationAPI(String text, String src, String target) {
         try {
-            String apiUrl = "http://159.69.60.114:8000/translate";
+            String apiUrl = "http://translationapi.assistantslab.com/translate";
 
             // Create a URL object with the API endpoint
             URL url = new URL(apiUrl);
