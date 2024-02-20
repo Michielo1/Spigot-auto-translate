@@ -1,24 +1,19 @@
+package com.michielo.api;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.stream.Stream;
 
+public class Translator {
 
-public class TranslatorTest {
-
-    @ParameterizedTest
-    @MethodSource("translationTestData")
-    public void testTranslationAPI(String text, String sourceLang, String targetLang, String expectedTranslation) {
+    public String translate(String text, String origin, String target) {
         try {
             String apiUrl = "http://translationapi.assistantslab.com/translate";
 
@@ -39,8 +34,8 @@ public class TranslatorTest {
             connection.setRequestProperty("Content-Type", "application/json");
 
             // Create JSON payload
-            String jsonInputString = "{\"text\":\"" + text + "\",\"source_lang\":\"" + sourceLang
-                    + "\",\"target_lang\":\"" + targetLang + "\"}";
+            String jsonInputString = "{\"text\":\"" + text + "\",\"source_lang\":\"" + origin
+                    + "\",\"target_lang\":\"" + target + "\"}";
 
             // Write the JSON payload to the connection's output stream
             try (OutputStream os = connection.getOutputStream()) {
@@ -76,17 +71,11 @@ public class TranslatorTest {
                 }
             }
 
-            Assertions.assertEquals(expectedTranslation, translation);
+            return translation;
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static Stream<Object[]> translationTestData() {
-        return Stream.of(
-                new Object[]{"Hoe gaat het?", "NL", "EN", "How's it going?"},
-                new Object[]{"How are you?", "EN", "NL", "Hoe ben je?"}
-        );
+        return null;
     }
 
 }

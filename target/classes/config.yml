@@ -1,19 +1,27 @@
-#############
-# MultiChat #
-#############
+##################
+# Auto-Translate #
+##################
 
-# For a startup guide please see [SOON]
+# Auto-translate can automatically set the language of a player based on what country the player originates
+# Would you like to enable (true) or disable (false) this feature?
+auto_language: True
 
-# Settings for changing the chat up into a global and local channel
-LocalAndGlobalChat: true
-GlobalChatPrefix: '%'
-LocalRadius: 50
-Local_Prefix: "&7[Local] &f%player% >> %message%"
-Global_Prefix: "&7[Global] &f%player% >> %message%"
+# What language would you like to default to if the Automatic Language detection is disabled,
+#  cannot fetch the player location or is not a supported language?
+# Please use a countrycode like 'EN'
+default_language: 'EN'
 
-# Translator settings
-EnableTranslations: True
-AllowFreeLanguageChoice: True
-ForceLanguage: False
-ForcedLanguage: 'ENG'
-DefaultLanguage: 'ENG'
+# Auto-translate uses KauriVPN to fetch the player's country-code to automatically set the language of the player.
+# This is completely free up to 20.000 queries a month. If you need more credits than that, you can buy a license-key
+#  on https://funkemunky.cc/shop and enter your license key here. Note that this is completely optional!
+license_key: ''
+
+
+# How do you want to deliver chatmessages?
+# - default -> This mode is simply global without any dependencies
+# - defaultRanged -> This mode is without any dependencies and only shows a chatmessage to people within a certain
+#                     radius you can define later
+# - luckpermsSimple -> this mode uses luckperms to determine the format (with prefixes & suffixes)
+# - luckpermsRanged -> Local-chat! This mode uses luckperms to determine the format (with prefixes & suffixes) and
+#                       only shows this to people within a certain radius you can define later
+chat_type: 'default'

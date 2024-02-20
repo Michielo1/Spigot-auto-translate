@@ -1,9 +1,9 @@
 main: com.michielo.Main
-name: MultiChat
+name: Auto-Translate
 version: '1.0'
 author: Michielo
 website: michielo.com
 
+
 commands:
   language:
-

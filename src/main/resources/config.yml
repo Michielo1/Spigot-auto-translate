@@ -1,29 +1,38 @@
-#############
-# MultiChat #
-#############
+##################
+# Auto-Translate #
+##################
 
-# For a startup guide please see [SOON]
+# Auto-translate can automatically set the language of a player based on what country the player originates
+# Would you like to enable (true) or disable (false) this feature?
+auto_language: True
 
-# Settings for changing the chat up into a global and local channel
-LocalAndGlobalChat: true
-GlobalChatPrefix: '%'
-LocalRadius: 50
-# For these prefixes you can use the placeholders:
-#  %player% : playername
-#  %message% : message
-#  %prefix% : Luckperms prefix
-Local_Prefix: "&7[Local] %prefix% &f%player% >> %message%"
-Global_Prefix: "&7[Global] %prefix% &f%player% >> %message%"
+# What language would you like to default to if the Automatic Language detection is disabled,
+#  cannot fetch the player location or is not a supported language?
+# Please use a countrycode like 'EN'
+default_language: 'EN'
 
-# Translator settings
-EnableTranslations: true
-#AllowFreeLanguageChoice: true
-#ForceLanguage: false
-#ForcedLanguage: 'ENG'
-#DefaultLanguage: 'ENG'
-# This prefix is only relevant if LocalAndGlobalChat is False
-# You can use the placeholders:
-#  %player% : playername
-#  %message% : message
-#  %prefix% : Luckperms prefix
-Translator_Prefix: "%prefix% %player% >> %message%"
+# Auto-translate uses KauriVPN to fetch the player's country-code to automatically set the language of the player.
+# This is completely free up to 20.000 queries a month. If you need more credits than that, you can buy a license-key
+#  on https://funkemunky.cc/shop and enter your license key here. Note that this is completely optional!
+license_key: ''
+
+
+# How do you want to deliver chatmessages?
+# - default -> This mode is simply global without any dependencies
+# - defaultRanged -> This mode is without any dependencies and only shows a chatmessage to people within a certain
+#                     radius you can define later
+# - luckpermsSimple -> this mode uses luckperms to determine the format (with prefixes & suffixes)
+# - luckpermsRanged -> Local-chat! This mode uses luckperms to determine the format (with prefixes & suffixes) and
+#                       only shows this to people within a certain radius you can define later
+chat_type: 'default'
+
+
+
+#
+# All the really important stuff is ABOVE this :)
+# Still enough details to go though
+#
+
+# What should the radius be? (if you have selected a ranged chatmethod)
+# We calculate this in the amount of blocks from the player
+chat_radius: 50
