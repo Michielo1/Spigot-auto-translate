@@ -8,6 +8,6 @@ import java.util.List;
 public interface ChatMethod {
 
     public List<Player> getPlayers(Location base);
-    public String formatText(String text, String sender);
+    public String formatText(String text, Player sender);
 
 }

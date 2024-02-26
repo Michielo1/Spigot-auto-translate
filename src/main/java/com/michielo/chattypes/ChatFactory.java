@@ -2,6 +2,8 @@ package com.michielo.chattypes;
 
 import com.michielo.chattypes.impl.DefaultMethod;
 import com.michielo.chattypes.impl.DefaultRangedMethod;
+import com.michielo.chattypes.impl.LuckpermsRangedMethod;
+import com.michielo.chattypes.impl.LuckpermsSimpleMethod;
 
 public class ChatFactory {
 
@@ -15,9 +17,9 @@ public class ChatFactory {
         } else if (chatType.equals(ChatTypes.DEFAULT_RANGED)) {
             method = new DefaultRangedMethod();
         } else if (chatType.equals(ChatTypes.LUCKPERMS)) {
-            method = null; // TODO
+            method = new LuckpermsSimpleMethod();
         } else if (chatType.equals(ChatTypes.LUCKPERMS_RANGED)) {
-            method = null; // TODO
+            method = new LuckpermsRangedMethod();
         }
         return method;
     }

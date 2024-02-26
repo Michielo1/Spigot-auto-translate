@@ -1,5 +1,6 @@
 package com.michielo.chattypes.impl;
 
+import com.michielo.Main;
 import com.michielo.chattypes.ChatMethod;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,8 +18,11 @@ public class DefaultMethod implements ChatMethod {
     }
 
     @Override
-    public String formatText(String text, String sender) {
-        return sender + " >> " + text;
+    public String formatText(String text, Player sender) {
+        String builder = Main.getInstance().getConfig().getString("chat_format");
+        builder = builder.replaceAll("%name%", sender.getDisplayName());
+        builder = builder.replaceAll("%message%", text);
+        return builder;
     }
 
 }

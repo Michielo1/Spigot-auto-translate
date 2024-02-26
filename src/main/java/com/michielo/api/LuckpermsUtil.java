@@ -1,4 +1,4 @@
-package com.michielo.util;
+package com.michielo.api;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
@@ -10,21 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class PrefixUtil {
+public class LuckpermsUtil {
 
-    private boolean isEnabled;
 
-    /*
-        Singleton implementation
-     */
-
-    private static PrefixUtil instance;
-    public static PrefixUtil getInstance() {
-        if (instance == null) instance = new PrefixUtil();
+    private static LuckpermsUtil instance;
+    public static LuckpermsUtil getInstance() {
+        if (instance == null) instance = new LuckpermsUtil();
         return instance;
     }
 
-    private PrefixUtil() {
+    private boolean isEnabled;
+
+    private LuckpermsUtil() {
         isEnabled = false;
         Plugin luckPermsPlugin = Bukkit.getServer().getPluginManager().getPlugin("LuckPerms");
 
@@ -34,6 +31,7 @@ public class PrefixUtil {
         }
         if (!setupLuckPerms()) {
             Bukkit.getLogger().severe("Attempted to fetch prefix but Luckperms hasnt been found!");
+            return;
         }
         isEnabled = true;
     }
@@ -58,6 +56,10 @@ public class PrefixUtil {
         return "";
     }
 
+    public boolean isEnabled() {
+        return this.isEnabled;
+    }
+
     /*
         Util
      */
@@ -70,6 +72,5 @@ public class PrefixUtil {
         }
         return false;
     }
-
 
 }

@@ -48,7 +48,7 @@ public class ChatDeliveryProcessor {
         ChatMethod method = factory.getMethod(chatType);
 
         // send sender his own message
-        sender.sendMessage(method.formatText(message, sender.getDisplayName()));
+        sender.sendMessage(method.formatText(message, sender));
 
         // get targets according to chatmethod
         List<Player> targets = method.getPlayers(sender.getLocation());
@@ -79,7 +79,7 @@ public class ChatDeliveryProcessor {
         // dispatch messages
         for (PlayerData pdata : targetData) {
             Bukkit.getPlayer(pdata.getUuid()).sendMessage(method.formatText(translationMap.get(pdata.getLanguage()),
-                    sender.getDisplayName()));
+                    sender));
         }
     }
 
