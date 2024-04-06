@@ -4,6 +4,8 @@ version: '1.0'
 author: Michielo
 website: michielo.com
 
+softdepend:
+  - LuckPerms
 
 commands:
   language:

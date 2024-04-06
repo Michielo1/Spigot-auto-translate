@@ -11,17 +11,35 @@ auto_language: True
 # Please use a countrycode like 'EN'
 default_language: 'EN'
 
-# Auto-translate uses KauriVPN to fetch the player's country-code to automatically set the language of the player.
-# This is completely free up to 20.000 queries a month. If you need more credits than that, you can buy a license-key
-#  on https://funkemunky.cc/shop and enter your license key here. Note that this is completely optional!
-license_key: ''
 
+# What chat format would you like to use?
+# Placeholders available:
+#   - '%name%' > the player name
+#   - '%message%' > the actual message being sent
+#   - '%prefix%' > the prefix of the player (requires luckperms chat_type)
+#   - '%suffix%' > the suffix of the player (requires luckperms chat_type)
+chat_format: '%name% >> %message%'
 
 # How do you want to deliver chatmessages?
 # - default -> This mode is simply global without any dependencies
 # - defaultRanged -> This mode is without any dependencies and only shows a chatmessage to people within a certain
 #                     radius you can define later
-# - luckpermsSimple -> this mode uses luckperms to determine the format (with prefixes & suffixes)
-# - luckpermsRanged -> Local-chat! This mode uses luckperms to determine the format (with prefixes & suffixes) and
-#                       only shows this to people within a certain radius you can define later
+# - luckpermsSimple -> this mode uses luckperms to fetch any prefixes and suffixes
+# - luckpermsRanged -> Local-chat! This mode uses luckperms to fetch any prefixes and suffixes. This mode
+#                       only shows the chat message this to people within a certain radius you can define later
 chat_type: 'default'
+
+
+
+#
+# All the really important stuff is ABOVE this :)
+#
+
+# What should the radius be? (if you have selected a ranged chatmethod)
+# We calculate this in the amount of blocks from the player
+chat_radius: 50
+
+# Auto-translate uses KauriVPN to fetch the player's country-code to automatically set the language of the player.
+# This is completely free up to 20.000 queries a month. If you need more credits than that, you can buy a license-key
+#  on https://funkemunky.cc/shop and enter your license key here. Note that this is completely optional!
+license_key: ''
