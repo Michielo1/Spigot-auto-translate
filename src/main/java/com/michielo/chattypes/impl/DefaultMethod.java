@@ -20,8 +20,8 @@ public class DefaultMethod implements ChatMethod {
     @Override
     public String formatText(String text, Player sender) {
         String builder = Main.getInstance().getConfig().getString("chat_format");
-        builder = builder.replaceAll("%name%", sender.getDisplayName());
-        builder = builder.replaceAll("%message%", text);
+        if (sender != null) builder = builder.replaceAll("%name%", sender.getDisplayName());
+        if (text != null) builder = builder.replaceAll("%message%", text);
         return builder;
     }
 
